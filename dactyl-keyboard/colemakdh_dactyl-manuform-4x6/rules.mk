@@ -1,11 +1,12 @@
 ENCODER_ENABLE = yes      # Enables the use of one or more encoders
 RGBLIGHT_ENABLE = no      # Enable keyboard RGB underglow
-LEADER_ENABLE = yes        # Enable the Leader Key feature
+LEADER_ENABLE = no        # Enable the Leader Key feature
 TAP_DANCE_ENABLE = yes
 UNICODEMAP_ENABLE = yes
 AUTO_SHIFT_ENABLE = yes
 EXTRAFLAGS += -flto
 STENO_ENABLE = yes
 NKRO_ENABLE = yes
+STENO_PROTOCOL = txbolt
 MOUSEKEY_ENABLE = no
 BOOTMAGIC_ENABLE = full

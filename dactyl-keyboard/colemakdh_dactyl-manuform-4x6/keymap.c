@@ -1,5 +1,4 @@
 #include QMK_KEYBOARD_H
-#include "keymap_steno.h"
 
 #define ST_BOLT QK_STENO_BOLT
 //#define ST_GEM  QK_STENO_GEMINI
@@ -46,11 +45,11 @@ enum {
     SOME_OTHER_DANCE
 };
 
-uint8_t cur_dance(qk_tap_dance_state_t *state);
+uint8_t cur_dance(tap_dance_state_t *state);
 
 // For the x tap dance. Put it here so it can be used in any keymap
-void x_finished(qk_tap_dance_state_t *state, void *user_data);
-void x_reset(qk_tap_dance_state_t *state, void *user_data);
+void x_finished(tap_dance_state_t *state, void *user_data);
+void x_reset(tap_dance_state_t *state, void *user_data);
 
 enum unicode_names {
 	INVEXCL,
@@ -142,10 +141,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                               |   #  |      |                              |      |  #   |
  *                               |------+------|                              |------+------|
  *                                             +-------------+  +-------------+
- *                                             |SpcEnt| CCCV |  |Super |SpcEnt|
+ *                                             |SpcEnt| CCCV |  |STENO |SpcEnt|
  *                                             | Nav  |      |  |      | Nav  | 
  *                                             |------+------|  |------+------|
- *                                             | ESP  | Bspc |  | Lead | DE   |
+ *                                             | ESP  | Bspc |  | Bspc | DE   |
  *                                             |      | LEFT |  |      |      | 											
  *                                             +-------------+  +-------------+
  */
@@ -156,8 +155,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_LSFT, KC_Z,   KC_X,   KC_C,   KC_D,   KC_V,  					     KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH, KC_LCMD,
                     MO(FKEY),KC_LALT,                                            	KC_RALT, TG(STENO),                    
                                     LT(NUM, KC_DEL),  S(LCMD(KC_2)),       			S(LCMD(KC_1)), LT(NUM, KC_TAB),                                     
-                                    TD(X_CTL), KC_CCCV,            				KC_LCMD, TD(X_CTL),                                    
-                                    MO(SPANISH), LT(LEFT, KC_BSPC),             	KC_LEAD, MO(GERMAN)                                     
+                                    TD(X_CTL), KC_CCCV,            				TG(STENO), TD(X_CTL),                                    
+                                    MO(SPANISH), LT(LEFT, KC_BSPC),             	KC_BSPC, MO(GERMAN)                                     
 ),
 
 /* 
@@ -352,7 +351,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 #ifdef ENCODER_ENABLE
-void encoder_update_user(uint8_t index, bool clockwise) {
+bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
         switch (biton32(layer_state)) {
             case BASE:
@@ -376,30 +375,9 @@ void encoder_update_user(uint8_t index, bool clockwise) {
                 break;
         }
     }
+    return true;
 }
 #endif
-
-LEADER_EXTERNS();
-
-void matrix_scan_user(void) {
-  LEADER_DICTIONARY() {
-    leading = false;
-    leader_end();
-    // Replace the sequences below with your own sequences.
-    SEQ_ONE_KEY(KC_Q) {
-      // Close Window
-      SEND_STRING(SS_LCMD(SS_LSFT("q")));
-    }
-    SEQ_TWO_KEYS(KC_B,KC_B) {
-      // 
-      SEND_STRING("Best regards, \nRobert");
-    }
-    SEQ_TWO_KEYS(KC_S, KC_S) {
-      // 
-      SEND_STRING("Saludos cordiales,\nRobert");
-    }
-  }
-}
 
 /* Return an integer that corresponds to what kind of tap dance should be executed.
  *
@@ -428,7 +406,7 @@ void matrix_scan_user(void) {
  * For the third point, there does exist the 'DOUBLE_SINGLE_TAP', however this is not fully tested
  *
  */
-uint8_t cur_dance(qk_tap_dance_state_t *state) {
+uint8_t cur_dance(tap_dance_state_t *state) {
     if (state->count == 1) {
         if (state->interrupted || !state->pressed) return SINGLE_TAP;
         // Key has not been interrupted, but the key is still held. Means you want to send a 'HOLD'.
@@ -457,7 +435,7 @@ static tap xtap_state = {
     .state = 0
 };
 
-void x_finished(qk_tap_dance_state_t *state, void *user_data) {
+void x_finished(tap_dance_state_t *state, void *user_data) {
     xtap_state.state = cur_dance(state);
     switch (xtap_state.state) {
         case SINGLE_TAP: register_code(KC_SPC); break;
@@ -471,7 +449,7 @@ void x_finished(qk_tap_dance_state_t *state, void *user_data) {
     }
 }
 
-void x_reset(qk_tap_dance_state_t *state, void *user_data) {
+void x_reset(tap_dance_state_t *state, void *user_data) {
     switch (xtap_state.state) {
         case SINGLE_TAP: unregister_code(KC_SPC); break;
         case SINGLE_HOLD: layer_off(NAV); break;
@@ -482,6 +460,6 @@ void x_reset(qk_tap_dance_state_t *state, void *user_data) {
     xtap_state.state = 0;
 }
 
-qk_tap_dance_action_t tap_dance_actions[] = {
+tap_dance_action_t tap_dance_actions[] = {
     [X_CTL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, x_finished, x_reset)
 };

@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define EE_HANDS
 
 #define TAPPING_TERM 200
-#define UNICODE_SELECTED_MODES UC_LNX
+#define UNICODE_SELECTED_MODES UNICODE_MODE_LINUX
 
 #define ENCODERS_PAD_A { D3 }
 #define ENCODERS_PAD_B { D2 }
