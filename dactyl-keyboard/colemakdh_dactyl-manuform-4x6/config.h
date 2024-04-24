@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define ENCODERS_PAD_A { D3 }
 #define ENCODERS_PAD_B { D2 }
-#define ENCODER_RESOLUTION 4
+#define ENCODER_RESOLUTION 2
 #define ENCODER_DIRECTION_FLIP
 
 #define LEADER_TIMEOUT 250
