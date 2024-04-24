@@ -1,6 +1,6 @@
 #include QMK_KEYBOARD_H
 
-#define ST_BOLT QK_STENO_BOLT
+//#define ST_BOLT QK_STENO_BOLT
 //#define ST_GEM  QK_STENO_GEMINI
 
 uint16_t copy_paste_timer;
@@ -135,27 +135,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+                              +------+------+------+------+------+--------|
  * | LSFT   |   Z  |   X  |   C  |   D  |   V  |                              |   K  |   H  | ,  < | . >  | /  ? | SUPER  |
  * `----------------------+------+------+------+  			      +------+------+------+----------------------'
- *                 | FKEYS|  ALT |                                                          | ALT  |STENO |
+ *                 | FKEYS|  ALT |                                                          | ALT  |SUPER |
  *                 +-------------+-------------+                              +-------------+-------------+
  *                               |  DEL | Enc1 |                              | Enc2 | TAB  |
  *                               |   #  |      |                              |      |  #   |
  *                               |------+------|                              |------+------|
  *                                             +-------------+  +-------------+
- *                                             |SpcEnt| CCCV |  |STENO |SpcEnt|
+ *                                             |SpcEnt| CCCV |  |SUPER |SpcEnt|
  *                                             | Nav  |      |  |      | Nav  | 
  *                                             |------+------|  |------+------|
  *                                             | ESP  | Bspc |  | Bspc | DE   |
  *                                             |      | LEFT |  |      |      | 											
  *                                             +-------------+  +-------------+
  */
-
+// TG(STENO) disabled and changed for KC_LCMD
 [BASE] = LAYOUT( \
       KC_ESC,  KC_Q,   KC_W,   KC_F,   KC_P,   KC_B,                                         KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_BSPC,
       KC_LCTL, KC_A,   KC_R,   KC_S,   KC_T,   KC_G,                                         KC_M,    KC_N,    KC_E,    KC_I,    KC_O, KC_LALT,
       KC_LSFT, KC_Z,   KC_X,   KC_C,   KC_D,   KC_V,  					     KC_K,    KC_H,    KC_COMM, KC_DOT,  KC_SLSH, KC_LCMD,
-                    MO(FKEY),KC_LALT,                                            	KC_RALT, TG(STENO),                    
+                    MO(FKEY),KC_LALT,                                            	KC_RALT, KC_LCMD,                    
                                     LT(NUM, KC_DEL),  S(LCMD(KC_2)),       			S(LCMD(KC_1)), LT(NUM, KC_TAB),                                     
-                                    TD(X_CTL), KC_CCCV,            				TG(STENO), TD(X_CTL),                                    
+                                    TD(X_CTL), KC_CCCV,            				KC_LCMD, TD(X_CTL),                                    
                                     MO(SPANISH), LT(LEFT, KC_BSPC),             	KC_BSPC, MO(GERMAN)                                     
 ),
 
@@ -317,15 +317,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * 
  * 
  */
-  [STENO] = LAYOUT(
-	STN_N1,  STN_N2,  STN_N3,  STN_N4,  STN_N5,  STN_N6,  						STN_N7,  STN_N8,  STN_N9,  STN_NA,  STN_NB,  STN_NC ,
-	_______,  STN_S1,  STN_TL,  STN_PL,  STN_HL,  STN_ST1, 						STN_ST3, STN_FR,  STN_PR,  STN_LR,  STN_TR,  STN_DR ,
-	_______, STN_S2,  STN_KL,  STN_WL,  STN_RL,  STN_ST2, 						STN_ST4, STN_RR,  STN_BR,  STN_GR,  STN_SR,  STN_ZR ,
-														_______,_______,    _______,_______,                                   
-														_______, _______,   _______,_______,                                   
- 														STN_A, _______,   	_______,STN_U,                                  
- 														STN_O, _______,    	_______,STN_E                                             
-   )
+// [STENO] = LAYOUT(
+//	STN_N1,  STN_N2,  STN_N3,  STN_N4,  STN_N5,  STN_N6,  						STN_N7,  STN_N8,  STN_N9,  STN_NA,  STN_NB,  STN_NC ,
+//	_______,  STN_S1,  STN_TL,  STN_PL,  STN_HL,  STN_ST1, 						STN_ST3, STN_FR,  STN_PR,  STN_LR,  STN_TR,  STN_DR ,
+//	_______, STN_S2,  STN_KL,  STN_WL,  STN_RL,  STN_ST2, 						STN_ST4, STN_RR,  STN_BR,  STN_GR,  STN_SR,  STN_ZR ,
+//														_______,_______,    _______,_______,                                   
+//														_______, _______,   _______,_______,                                   
+// 														STN_A, _______,   	_______,STN_U,                                  
+// 														STN_O, _______,    	_______,STN_E                                             
+//   )
 };
 
 void persistent_default_layer_set(uint16_t default_layer) {
