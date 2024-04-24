@@ -350,34 +350,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-#ifdef ENCODER_ENABLE
-bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) {
-        switch (biton32(layer_state)) {
-            case BASE:
-            // Scrolling with PageUp and PgDn.
-		if (clockwise) {
-                    tap_code(KC_PGDN);
-                } else {
-                    tap_code(KC_PGUP);
-                }
-                break;
-        }
-    } else if (index == 1) {
-        switch (biton32(layer_state)) {
-            case BASE:
-            // Switch programs in i3
-                if (clockwise) {
-                    tap_code16(LCMD(KC_RIGHT));
-                } else {
-                    tap_code16(LCMD(KC_LEFT));
-                }
-                break;
-        }
-    }
-    return true;
-}
-#endif
 
 /* Return an integer that corresponds to what kind of tap dance should be executed.
  *
